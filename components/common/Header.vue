@@ -3,23 +3,18 @@
 .header
   border-bottom 1px solid #eee
   box-shadow 0 1px 5px #eee
-  background #fff
 .header__topbar
-  display flex
-  justify-content space-between
-  align-items center
   width 1120px
   height 58px
   margin 0 auto
 .header__logo
-  flex 3
   width 120px
   height 33px
-  line-height 58px
+  text-indent -9999px
   background url('~assets/images/logo.png')
 .header__menu
-  flex 10
-  display flex
+  flex 1
+  margin 0 20px
 .header__link
   height 58px
   padding 0 20px
@@ -34,45 +29,47 @@
   color #fff
   &&:hover
     color #fff
-.header__message
-  flex 1
 .header__login
-  flex 2
+  width 200px
+.header__login-link
+  font-size 14px
+  color $grayTextColor
+  &&:hover
+    color $mainColor
 </style>
 
 <template lang="pug">
 .header
+  //- S 顶部模块
+  el-row(class="header__topbar" type="flex" justify="space-between" align="middle")
 
-  .header__topbar
-
-    h1(class="header__logo")
+    h1(class="header__logo") 马蜂窝旅游网
     //- 头部logo模块
 
-    .header__menu
-      nuxt-link(v-for="(item,index) in menuData" :key="item.path" :to="item.path" :class="{'header__link':true,'header__link_active':current===index}" @click.native.stop="handleClick(index)") {{ item.name }}
+    el-row(class="header__menu" type="flex")
+      nuxt-link(class="header__link"
+        v-for="(item,index) in menuData"
+        :key="item.path"
+        :to="item.path"
+        :class='["header__link",{"header__link_active":(index===current)}]'
+        @click.native.stop="handleClick(index)"
+        ) {{ item.name }}
     //- 头部菜单模块
 
-    .header__message
-      el-dropdown
-        .el-dropdown-link
-          i.el-icon-bell
-          span 消息
-          i.el-icon-caret-bottom.el-icon--right
-        el-dropdown-menu(slot="dropdown")
-          el-dropdown-item 消息
-    //- 头部信息模块
-
-    .header__login 登陆/注册
+    .header__login
+      nuxt-link(to="/user/login" class="header__login-link") 登陆/注册
     //- 头部登陆注册模块
+
+  //- E 顶部模块
 
 </template>
 
 <script>
-
 export default {
-  components: {},
+  name: 'Header',
   data () {
     return {
+      /* --------------------------导航菜单数据-------------------------------- */
       menuData: [
         { name: "首页", path: "/" },
         { name: "旅游攻略", path: "/strategy" },
@@ -83,15 +80,9 @@ export default {
     }
   },
   methods: {
-    handleClick (index) {//处理菜单点击
+    handleClick (index) { //处理菜单点击
       this.current = index
     }
-  },
-  created () {
-
-  },
-  mounted () {
-
   }
 }
 </script>
