@@ -1,3 +1,4 @@
+const path = require('path')
 export default {
   mode: 'universal',
   /*
@@ -48,7 +49,10 @@ export default {
    */
   modules: ['@nuxtjs/axios'],
   axios: {
-    baseUrl: 'http://127.0.0.1:1337' //基础路径
+    baseURL: 'http://127.0.0.1:1337' //基础路径
+  },
+  alias: {
+    img: path.join(__dirname, './assets/images/')
   },
   /*
    ** Build configuration

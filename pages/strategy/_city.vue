@@ -3,8 +3,7 @@
 
 </style>
 <template lang='pug'>
-.strategy
-  nuxt-link(:to='{name:"index",params:{id:22}}') 跳转
+.post {{ $route.params.city }}
 </template>
 
 <script>

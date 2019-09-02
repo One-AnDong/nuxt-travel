@@ -20,5 +20,11 @@
     "pug-plain-loader": "^1.0.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2"
+  },
+  "config": {
+    "nuxt": {
+      "host": "127.0.0.1",
+      "port": "1818"
+    }
   }
 }
