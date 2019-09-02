@@ -7,28 +7,20 @@
   width 1120px
   height 58px
   margin 0 auto
+/* logo模块
+----------------------------------------------- */
 .header__logo
   width 120px
   height 33px
   text-indent -9999px
   background url('~assets/images/logo.png')
+/* 菜单模块
+----------------------------------------------- */
 .header__menu
   flex 1
   margin 0 20px
-.header__link
-  height 58px
-  padding 0 20px
-  line-height 58px
-  color #333
-  cursor pointer
-  &&:hover
-    border-bottom 2px solid $mainColor
-    color $mainColor
-.header__link_active
-  background-color $mainColor
-  color #fff
-  &&:hover
-    color #fff
+/* 登陆信息模块
+----------------------------------------------- */
 .header__login
   width 200px
 .header__login-link
@@ -40,49 +32,27 @@
 
 <template lang="pug">
 .header
-  //- S 顶部模块
+  //-  网站顶部模块
   el-row(class="header__topbar" type="flex" justify="space-between" align="middle")
-
+    //- logo模块、
     h1(class="header__logo") 马蜂窝旅游网
-    //- 头部logo模块
 
-    el-row(class="header__menu" type="flex")
-      nuxt-link(class="header__link"
-        v-for="(item,index) in menuData"
-        :key="item.path"
-        :to="item.path"
-        :class='["header__link",{"header__link_active":(index===current)}]'
-        @click.native.stop="handleClick(index)"
-        ) {{ item.name }}
-    //- 头部菜单模块
-
+    //- 菜单模块
+    el-row(class="header__menu")
+      top-nav
+    //- 登陆注册模块
     .header__login
-      nuxt-link(to="/user/login" class="header__login-link") 登陆/注册
-    //- 头部登陆注册模块
-
-  //- E 顶部模块
-
+      user-info
 </template>
 
 <script>
+import UserInfo from '@/components/user/UserInfo'
+import TopNav from '@/components/common/TopNav'
 export default {
   name: 'Header',
-  data () {
-    return {
-      /* --------------------------导航菜单数据-------------------------------- */
-      menuData: [
-        { name: "首页", path: "/" },
-        { name: "旅游攻略", path: "/strategy" },
-        { name: "酒店", path: "/hotel" },
-        { name: "国内机票", path: "/ticket" },
-      ],
-      current: 0
-    }
-  },
-  methods: {
-    handleClick (index) { //处理菜单点击
-      this.current = index
-    }
+  components: {
+    UserInfo,
+    TopNav
   }
 }
 </script>
