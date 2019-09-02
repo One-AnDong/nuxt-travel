@@ -38,7 +38,7 @@
     h1(class="header__logo") 马蜂窝旅游网
 
     //- 菜单模块
-    el-row(class="header__menu")
+    .header__menu
       top-nav
     //- 登陆注册模块
     .header__login
