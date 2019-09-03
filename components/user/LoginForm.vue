@@ -50,8 +50,9 @@ export default {
       let res = await this.setLogin(this.loginForm)
       const { data } = res
       //将token和用户信息保存到vuex
-      this.setToken(data.token)
-      this.setUserInfo(data.user)
+      // this.setToken(data.token)
+      // this.setUserInfo(data.user)
+      // this.$router.push({ name: 'index' })
     },
     /* --------------------------接口函数-------------------------------- */
     setLogin (data) {
