@@ -23,6 +23,7 @@
 ----------------------------------------------- */
 .header__login
   width 200px
+  // height 100%
 .header__login-link
   font-size 14px
   color $grayTextColor

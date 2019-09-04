@@ -37,7 +37,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setToken', 'setUserInfo']),
+    ...mapActions({
+      setToken: 'user/setToken',
+      setUserInfo: 'user/setUserInfo'
+    }),
     /* --------------------------事件处理函数-------------------------------- */
     handleClick () {//登陆按钮
       this.$refs.loginForm.validate(valid => {
@@ -50,9 +53,10 @@ export default {
       let res = await this.setLogin(this.loginForm)
       const { data } = res
       //将token和用户信息保存到vuex
-      // this.setToken(data.token)
-      // this.setUserInfo(data.user)
-      // this.$router.push({ name: 'index' })
+      this.setToken(data.token)
+      this.setUserInfo(data.user)
+      this.$message.success('登陆成功，正在跳转中')
+      this.$router.push({ name: 'index' })
     },
     /* --------------------------接口函数-------------------------------- */
     setLogin (data) {

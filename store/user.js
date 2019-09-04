@@ -2,29 +2,36 @@ export const state = () => ({
   token: '',
   userInfo: {}
 })
-export const getters = () => ({
+export const getters = {
   doneToken(state) {
     return 'Bearer' + state.token
   },
   doneUserInfo(state) {
     return state.userInfo
   }
-})
-export const mutations = () => ({
-  setToken(state, token) {
+}
+export const mutations = {
+  //设置token
+  SET_TOKEN(state, token) {
     state.token = token
   },
-  setUserInfo(state, data) {
+  //清除用户信息
+  CLEARN_USERINFO(state) {
+    state.token = ''
+    state.userInfo = ''
+  },
+  //设置用户信息
+  SET_USERINFO(state, data) {
     state.userInfo = data
   }
-})
-export const actions = () => ({
+}
+export const actions = {
   //请求设置token
   setToken({ commit }, token) {
-    commit('setToken', token)
+    commit('SET_TOKEN', token)
   },
   //请求设置用户信息
   setUserInfo({ commit }, data) {
-    commit('setUserInfo', data)
+    commit('SET_USERINFO', data)
   }
-})
+}

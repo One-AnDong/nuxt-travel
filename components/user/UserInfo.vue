@@ -1,14 +1,33 @@
 <style lang='stylus' scoped>
-//@import url(); 引入公共css类
-
+@import '~assets/stylus/variables.styl'
+.info
+  width 100%
+  height 100%
+.info__avatar
+  width 36px
+  height 36px
+  border 2px solid #ffffff
+  border-radius 50%
+  vertical-align middle
+  box-sizing border-box
+  &&:hover
+    border 2px solid $mainColor
 </style>
 <template lang='pug'>
 .info
-  nuxt-link(to="/user/login" class="header__login-link") 登陆/注册
+  nuxt-link(v-if="!token" to="/user/login" class="header__login-link") 登陆/注册
+  el-dropdown(v-else)
+    span.el-dropdown-link
+      img(class="info__avatar" :src="`${$axios.defaults.baseURL}${userInfo.defaultAvatar}`")
+      span {{ userInfo.nickname }}
+      i.el-icon-arrow-down.el-icon--right
+    el-dropdown-menu(slot='dropdown')
+      el-dropdown-item 个人中心
+      el-dropdown-item(@click.native='handleBack') 退出
 </template>
 
 <script>
-
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {},
   data () {
@@ -16,23 +35,25 @@ export default {
 
     }
   },
-  computed: {},
-  watch: {},
-  methods: {
-
+  computed: {
+    ...mapState(
+      {
+        userInfo: state => state.user.userInfo,
+        token: state => state.user.token
+      }
+    )
   },
-  created () {
-
+  methods: {
+    ...mapMutations({
+      clearUserInfo: 'user/CLEARN_USERINFO'
+    }),
+    handleBack () {
+      this.clearUserInfo()
+      // this.$router.push({name:'/'})
+    }
   },
   mounted () {
-
-  },
-  beforeCreate () { },
-  beforeMount () { },
-  beforeUpdate () { },
-  updated () { },
-  beforeDestroy () { },
-  destroyed () { },
-  activated () { }
+    console.log(this.userInfo)
+  }
 }
 </script>
