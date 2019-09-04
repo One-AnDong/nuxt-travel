@@ -43,11 +43,14 @@ export default {
       userLogin: 'user/userLogin'
     }),
     /* --------------------------事件处理函数-------------------------------- */
-    handleClick () {//登陆按钮
+    handleClick () { //登陆按钮
       this.$refs.loginForm.validate(valid => {
         if (!valid) return this.$message.error('请输入账户/密码')
         // this.handleLogin() ==>当前组件请求
-        this.userLogin(this.loginForm) //调用vuex actions请求
+        this.userLogin(this.loginForm).then(() => {
+          this.$message.success('登陆成功，正在跳转中')
+          this.$router.push({ name: 'index' })
+        })
       })
     },
     /* --------------------------请求处理函数-------------------------------- */

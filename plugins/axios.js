@@ -1,10 +1,13 @@
 import { Message } from 'element-ui'
 
-export default ({ $axios }) => {
+export default ({ $axios, store }) => {
+  //请求拦截
   $axios.onRequest(config => {
-    //config.headers['Authorization'] = localStorage.MANAGE_TOKEN
-    // console.log(config)
+    // if (store.state.user.token) {
+    //   config.headers['Authorization'] = `Bearer [${store.state.user.token}]`
+    // }
   })
+  //错误响应拦截
   $axios.onError(err => {
     const { statusCode, message } = err.response.data
     if (statusCode === 400) {

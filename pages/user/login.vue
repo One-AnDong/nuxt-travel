@@ -49,11 +49,11 @@
 
 <script>
 import LoginForm from '@/components/user/LoginForm'
-import LoginRegister from '@/components/user/RegisterForm'
+import RegisterForm from '@/components/user/RegisterForm'
 export default {
   components: {
     LoginForm,
-    LoginRegister
+    RegisterForm
   },
   data () {
     return {

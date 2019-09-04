@@ -1,4 +1,3 @@
-import { Message } from 'element-ui'
 export const state = () => ({
   token: '',
   userInfo: {}
@@ -44,7 +43,25 @@ export const actions = {
     })
     commit('SET_TOKEN', res.data.token)
     commit('SET_USERINFO', res.data.user)
-    Message.success('登陆成功，正在跳转中')
-    this.$router.push({ name: 'index' })
+  },
+  //注册请求
+  async userRegister({ dispatch }, data) {
+    let res = await this.$axios({
+      url: '/accounts/register',
+      method: 'POST',
+      data
+    })
+    return res
+  },
+  //获取验证码
+  async getCaptch({ commit }, tel) {
+    let res = await this.$axios({
+      url: 'captchas',
+      method: 'POST',
+      data: {
+        tel
+      }
+    })
+    return res
   }
 }
