@@ -39,13 +39,15 @@ export default {
   methods: {
     ...mapActions({
       setToken: 'user/setToken',
-      setUserInfo: 'user/setUserInfo'
+      setUserInfo: 'user/setUserInfo',
+      userLogin: 'user/userLogin'
     }),
     /* --------------------------事件处理函数-------------------------------- */
     handleClick () {//登陆按钮
       this.$refs.loginForm.validate(valid => {
         if (!valid) return this.$message.error('请输入账户/密码')
-        this.handleLogin()
+        // this.handleLogin() ==>当前组件请求
+        this.userLogin(this.loginForm) //调用vuex actions请求
       })
     },
     /* --------------------------请求处理函数-------------------------------- */
