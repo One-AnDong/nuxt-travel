@@ -56,7 +56,9 @@ export default {
     baseURL: 'http://127.0.0.1:1337' //基础路径
   },
   alias: {
-    img: path.join(__dirname, './assets/images/')
+    img: path.join(__dirname, './assets/images/'),
+    components: path.join(__dirname, './components'),
+    styl: path.join(__dirname, './assets/stylus')
   },
   /*
    ** Build configuration
