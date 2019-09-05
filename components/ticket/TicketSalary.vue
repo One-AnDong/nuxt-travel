@@ -5,6 +5,7 @@
 .salary__item
   position relative
   margin 0 10px
+  height 171px
 /* 特价机票信息栏模块
 ------------------------------------- */
 .salary__info
@@ -33,7 +34,11 @@ el-row.salary(type='flex')
   el-col.salary__item(v-for='(item,index) in salaryData'
                       :span='6'
                       :key='index')
-    img.salary__img( :src='item.pic' @click='handleClick(item)')
+
+    //- 机票图片
+    img.salary__img( :src='item.cover' @click='handleClick(item)')
+
+    //- 机票信息
     p.salary__info
       span.salary__info-city {{ item.departCity + '-' + item.destCity }}
       span.salary__info-price ¥{{ item.price }}
@@ -42,27 +47,37 @@ el-row.salary(type='flex')
 <script>
 
 export default {
-  components: {},
+  asyncData ({ isDev, route, store, env, params, query, req, res, redirect, error }) {
+
+  },
   data () {
     return {
       /* --------------------------------------特价机票数据--------------------------------------- */
       salaryData: [
-        { departCity: '广州', departCode: 'CAN', destCity: '上海', destCode: 'SHA', pic: '/sh_1.jpg', departDate: '2019-09-04', price: '699' },
-        { departCity: '广州', departCode: 'CAN', destCity: '上海', destCode: 'SHA', pic: '/sh_1.jpg', departDate: '2019-09-04', price: '699' },
-        { departCity: '广州', departCode: 'CAN', destCity: '上海', destCode: 'SHA', pic: '/sh_1.jpg', departDate: '2019-09-04', price: '699' },
-        { departCity: '广州', departCode: 'CAN', destCity: '上海', destCode: 'SHA', pic: '/sh_1.jpg', departDate: '2019-09-04', price: '699' }
+        { departCity: '广州', departCode: 'CAN', destCity: '北京', destCode: 'BJS', cover: 'http://n4-q.mafengwo.net/s7/M00/2E/D4/wKgB6lSgx0KAAtuCAAVoSPI1DUk40.jpeg?imageMogr2%2Fthumbnail%2F%21750x563r%2Fgravity%2FCenter%2Fcrop%2F%21750x563%2Fquality%2F90', departDate: '2019-09-04', price: '477' },
+        { departCity: '广州', departCode: 'CAN', destCity: '天津', destCode: 'TSN', cover: 'http://p2-q.mafengwo.net/s7/M00/6D/1B/wKgB6lSuVEKABi4KAAVchdZie70489.png?imageMogr2%2Fthumbnail%2F%21750x563r%2Fgravity%2FCenter%2Fcrop%2F%21750x563%2Fquality%2F90', departDate: '2019-09-04', price: '465' },
+        { departCity: '广州', departCode: 'CAN', destCity: '太原', destCode: 'TYN', cover: 'http://b2-q.mafengwo.net/s5/M00/7B/37/wKgB3FIDDByAcTAFAAPaSajnMyk40.jpeg?imageMogr2%2Fthumbnail%2F%21750x563r%2Fgravity%2FCenter%2Fcrop%2F%21750x563%2Fquality%2F90', departDate: '2019-09-04', price: '439' },
+        { departCity: '广州', departCode: 'CAN', destCity: '大连', destCode: 'DLC', cover: 'http://b4-q.mafengwo.net/s5/M00/53/D1/wKgB3FGcJuCAFdf1AAM-uEqmHBw07.jpeg?imageMogr2%2Fthumbnail%2F%21750x563r%2Fgravity%2FCenter%2Fcrop%2F%21750x563%2Fquality%2F90', departDate: '2019-09-04', price: '567 ' }
       ]
     }
   },
   methods: {
     /* --------------------------事件处理函数------------------------------- */
     handleClick (item) { // 处理图片点击
-      const { pic, price, ...params } = item
+      const { cover, price, ...params } = item
       this.$router.push({ name: 'ticket-flights', query: params })
+    },
+    /* --------------------------事件请求函数-------------------------------- */
+    getSaleTicket () { // 请求获取热买机票
+      this.$axios({
+        url: '/airs/sale',
+      }).then(res => {
+        this.salaryData = res.data.data
+      })
     }
   },
-  created () {
-
+  mounted () {
+    // this.getSaleTicket()
   }
 }
 </script>

@@ -12,13 +12,15 @@
   box-sizing border-box
   &&:hover
     border 2px solid $mainColor
+.header__login-link
+  color $mainColor
 </style>
 <template lang='pug'>
 .info
-  nuxt-link(v-if="!token" to="/user/login" class="header__login-link") 登陆/注册
+  nuxt-link.header__login-link(v-if="!token" to="/user/login" ) 登陆/注册
   el-dropdown(v-else)
     span.el-dropdown-link
-      img(class="info__avatar" :src="`${$axios.defaults.baseURL}${userInfo.defaultAvatar}`")
+      img.info__avatar(:src="`${$axios.defaults.baseURL}${userInfo.defaultAvatar}`")
       span {{ userInfo.nickname }}
       i.el-icon-arrow-down.el-icon--right
     el-dropdown-menu(slot='dropdown')
@@ -51,9 +53,6 @@ export default {
       this.clearUserInfo()
       // this.$router.push({name:'/'})
     }
-  },
-  mounted () {
-    console.log(this.userInfo)
   }
 }
 </script>

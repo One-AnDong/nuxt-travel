@@ -1,7 +1,7 @@
 <style lang='stylus' scoped>
 @import '~styl/variables.styl'
 .ticket
-  width 1120px
+  width 1000px
   margin 0 auto
 .ticket__title
   margin 15px 0

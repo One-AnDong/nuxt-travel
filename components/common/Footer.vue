@@ -39,7 +39,7 @@
   .footer__container
     el-row(class="footer__info")
       el-col(:span='6' :offset='1')
-        h5(class="footer__title") 闲云旅游旅游网
+        h5(class="footer__title") 马蜂窝旅游网
         p(class="footer__item") 上亿旅行者共同打造的
           strong(class="footer__item-number") "旅行神器"
         p(class="footer__item")

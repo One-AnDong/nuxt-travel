@@ -1,3 +1,9 @@
+/**
+ * @Author: Joe Yao
+ * @Date: 2019-09-05 10:05:23
+ * @Last Modified by: Joe Yao
+ * @Last Modified time: 2019-09-05 10:07:40
+ */
 <style lang='stylus' scoped>
 @import '~styl/variables.styl'
 .search
@@ -35,6 +41,7 @@
 </template>
 
 <script>
+
 import SingleTicket from 'components/ticket/SingleTicket'
 export default {
   components: {
