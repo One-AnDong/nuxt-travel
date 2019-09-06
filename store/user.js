@@ -1,7 +1,9 @@
+/* --------------------------state模块-------------------------------- */
 export const state = () => ({
   token: '',
   userInfo: {}
 })
+/* --------------------------getters模块------------------------------ */
 export const getters = {
   doneToken(state) {
     return 'Bearer' + state.token
@@ -10,6 +12,7 @@ export const getters = {
     return state.userInfo
   }
 }
+/* --------------------------mutations模块---------------------------- */
 export const mutations = {
   //设置token
   SET_TOKEN(state, token) {
@@ -25,6 +28,7 @@ export const mutations = {
     state.userInfo = data
   }
 }
+/* --------------------------actions模块------------------------------ */
 export const actions = {
   //请求设置token
   setToken({ commit }, token) {
