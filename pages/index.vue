@@ -15,21 +15,18 @@
   z-index 999
 </style>
  <template lang="pug">
-  //- S 首页模块
+  //-  首页模块
   div(class="home")
 
+    //- 轮播图模块
     el-carousel(height='700px')
       el-carousel-item(v-for='item in imgData'  :key='item.url')
         .home__banner(:style="{background:`url(${$axios.defaults.baseURL+item.url}) center center no-repeat`,backgroundSize:'contain contain'}")
 
-    //- 轮播图模块
-
+    //- 搜索模块
     div.home__search
       el-row
         Tabs(:options='options' @tabClick='handleClick')
-    //- 搜索模块
-
-  //- E 首页模块
 </template>
 
 <script>

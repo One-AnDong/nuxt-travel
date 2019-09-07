@@ -60,6 +60,7 @@
       el-autocomplete.single__depart(v-model='singleForm.departCity'
                         :fetch-suggestions='querySearchDepart'
                         @select='handleDepartSelect'
+                        @blur='handleDepartBlur'
                         :debounce='+300'
                         placeholder='请搜索出发城市')
 
@@ -73,7 +74,8 @@
 
     //- 出发日期选择框
     el-form-item(label='出发时间')
-        el-date-picker.single__date(:disabledDate='handleDisabledDate' type='date' placeholder='选择日期' v-model='singleForm.departDate'          @change='handleDate' )
+        el-date-picker.single__date(type='date' placeholder='选择日期' v-model='singleForm.departDate'
+        @change='handleDate' :picker-options='{"disabledDate":handleDisabledDate}')
 
     //- 确认搜索按钮
     el-form-item
@@ -98,7 +100,9 @@ export default {
         destCode: '',
         departDate: moment(Date.now()).format('YYYY-MM-DD')
       },
-      validator: []
+      validator: [],
+      departData: [],
+      destData: []
     }
   },
   methods: {
@@ -136,33 +140,39 @@ export default {
       if (!queryString) return callback([])
       this.handleGetCity(queryString).then(data => {
         callback(data)
-        //默认选择第一项
-        this.singleForm.departCity = data[0].value
-        this.singleForm.departCode = data[0].sort
+        this.departData = data
       })
     },
     handleDepartSelect (item) {//处理出发城市选择
       this.singleForm.departCity = item.value
       this.singleForm.departCode = item.sort
     },
+    handleDepartBlur () { //处理出发城市输入框失焦
+      if (this.singleForm.departCity) return
+      this.singleForm.departCity = this.departData.length > 0 ? this.departData[0].value : ''
+      this.singleForm.departCode = this.departData.length > 0 ? this.departData[0].sort : ''
+    },
     querySearchDest (queryString, callback) { //处理到达城市输入
       if (!queryString) return callback([])
       this.handleGetCity(queryString).then(data => {
         callback(data)
-        //默认选择第一项
-        this.singleForm.destCity = data[0].value
-        this.singleForm.destCode = data[0].sort
+        this.destData = data
       })
     },
     handleDestSelect (item) { //处理到达城市选择
       this.singleForm.destCity = item.value
       this.singleForm.destCode = item.sort
     },
+    handleDestBlur () { //处理到达城市输入框失焦
+      if (this.singleForm.destCity) return
+      this.singleForm.destCity = this.departData.length > 0 ? this.departData[0].value : ''
+      this.singleForm.destCode = this.departData.length > 0 ? this.departData[0].sort : ''
+    },
     handleDate (date) { //处理日期选择
       this.singleForm.departDate = moment(date).format('YYYY-MM-DD')
     },
-    handleDisabledDate (date) { //处理日期禁用
-
+    handleDisabledDate (time) { //处理日期禁用
+      return time.getTime() < Date.now() - 8.64e7
     },
     handleSwitch () { // 交换两个值
       let tempCity = this.singleForm.departCity
