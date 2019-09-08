@@ -101,7 +101,7 @@ div
   el-row.recommend(type='flex' justify='space-between' align='middle' v-show='isShow')
     el-col.recommend__title(:span='4') 低价推荐
     el-col.recommend__list(:span='20')
-      el-row.recommend__item(v-for='item in data.seat_infos' type='flex' justify='space-between' align='middle')
+      el-row.recommend__item(v-for='(item,index) in data.seat_infos' :key='index' type='flex' justify='space-between' align='middle')
         el-col(:span='16')
           span.recommend__name {{ item.name }}
           span.recommend__supplier {{ ' | ' + item.supplierName }}

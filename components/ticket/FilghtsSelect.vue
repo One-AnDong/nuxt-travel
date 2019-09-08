@@ -1,26 +1,9 @@
 <style lang='stylus' scoped>
-@import '~assets/stylus/variables.styl'
-.select
-  margin 20px 0 10px 0
-  font-size 14px
-.select__item
-  margin 0 5px
-.list__cancel
-  font-size 14px
-.list__btn
-  margin 0 5px
-  padding 7px 15px
-  border none
-  color #fff
-  background-color $mainColor
-.list__pagation
-  margin 10px 0
-.list__warning
-  text-align center
-  color #999
+//@import url(); 引入公共css类
+
 </style>
 <template lang='pug'>
-.list
+.select
   //-  列表筛选栏模块
   el-row.select(type='flex' justify='space-between' align='middle')
     el-col(:span='8') 单程：{{ `${filghtsData.info.departCity }-${filghtsData.info.destCity }/${filghtsData.info.departDate}`}}
@@ -51,88 +34,27 @@
   .list__cancel
     span 筛选:
     el-button.list__btn(round size='small' @click='handleCancel') 撤销
-
-  //- 机票列表
-  .list__filghts
-    filghts-header
-    filghts-item(v-for='item in ticketData' :data='item' :key='item.id')
-    .list__warning(v-if='ticketData.length===0' ) 暂无航班信息！
-  //- 机票分页
-  .list__pagation
-    el-pagination(@size-change='handleSizeChange' @current-change='handleCurrentChange' :current-page='pageNum' :page-sizes='[5, 10, 15, 20]' :page-size='pageSize' layout='total, sizes, prev, pager, next, jumper' :total='total' v-if='ticketData.length>0')
-
-
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
-import FilghtsItem from 'components/ticket/FilghtsItem'
-import FilghtsHeader from 'components/ticket/FilghtsHeader'
+import { mapState } from 'vuex'
 export default {
-  components: {
-    FilghtsItem,
-    FilghtsHeader
-  },
+  components: {},
   data () {
     return {
-      sizeData: [ //飞机尺寸
-        { value: 'L', label: '大' },
-        { value: 'M', label: '中' },
-        { value: 'S', label: '小' }
-      ],
-      cacheTickData: [],
-      ticketData: [],//机票数据
-      airport: '',
-      company: '',
-      departTime: '',
-      planeSize: '',
-      pageNum: 1,
-      pageSize: 5,
-      total: 0
+
     }
   },
   computed: {
     ...mapState({
       filghtsData: state => state.ticket.currentData
-    }),
-    tiket () {
-      return this.ticketData
-    }
-  },
-  watch: {
-    filghtsData (val) {
-      this.getTicketData(val.flights)
-    }
+    })
   },
   methods: {
-    ...mapActions({
-      getAirs: 'ticket/getAirs'
-    }),
-    /* --------------------------分页功能-------------------------------- */
-    handleSizeChange (val) {//选择一页多少条数据
-      this.pageSize = val
-      if (this.cacheTickData.length === 0) {
-        return this.getTicketData(this.filghtsData.flights)
-      }
-      this.getTicketData(this.cacheTickData)
-    },
-    handleCurrentChange (val) {//选择页数
-      this.pageNum = val
-      if (this.cacheTickData.length === 0) {
-        return this.getTicketData(this.filghtsData.flights)
-      }
-      this.getTicketData(this.cacheTickData)
-    },
-    getTicketData (data) {//获取机票数据
-      this.ticketData = data.filter((item, index) => {
-        return index >= (this.pageNum - 1) * this.pageSize && index < this.pageNum * this.pageSize
-      })
-      this.total = data.length
-    },
     /* --------------------------筛选功能-------------------------------- */
     handleAirport (val) { //筛选起飞机场
-      this.pageNum = 1
       const data = this.getFilterData(this.filghtsData.flights, 'org_airport_name', val)
+      this.$emit('setTickData', data)
       this.cacheTickData = data
       this.getTicketData(this.cacheTickData)
     },
@@ -173,9 +95,6 @@ export default {
       this.getTicketData(this.filghtsData.flights)
       this.cacheTickData.length = 0
     }
-  },
-  mounted () {
-    this.getAirs(this.$route.query)
   }
 }
 </script>

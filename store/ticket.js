@@ -1,24 +1,50 @@
 /* --------------------------状态模块-------------------------------- */
 export const state = () => ({
   airsHistory: [],
-  filghtsData: {}
+  currentData: {
+    info: {},
+    options: {}
+  }
 })
 /* ---------------------------getters模块--------------------------- */
 export const getters = {
-  doneAirs(state) {
+  filghtsData(state) {
     //返回最新
-    return state.airsHistory.slice(-1)[0]
+    // return state.airsHistory.slice(-1)[0]
+    return state.currentData
   }
 }
 /* --------------------------mutations模块--------------------------- */
 export const mutations = {
   //保存查询记录
   SET_AIRSHISTORY(state, obj) {
+    // state.airsHistory.map(item=>{
+    //   if()item.info.departCity item.info.destCity item.info.departDate
+    // })
+
+    if (state.airsHistory.length === 0) {
+      state.currentData = obj
+      state.airsHistory.push(obj)
+      return
+    }
+    for (let i = 0, l = state.airsHistory.length; i < l; i++) {
+      let current = state.airsHistory[i]
+      if (
+        current.info.departCity === obj.info.departCity &&
+        current.info.destCity === obj.info.destCity &&
+        current.info.departDate === obj.info.departDate
+      )
+        return
+    }
+    state.currentData = obj
     state.airsHistory.push(obj)
   },
   //设置filghts数据
   SET_FILGHTS(state, data) {
     state.filghtsData = data
+  },
+  SWITCH_DATA(state, index) {
+    state.currentData = state.airsHistory.slice(index, index + 1)[0]
   }
 }
 /* --------------------------actions模块------------------------------ */
@@ -31,6 +57,7 @@ export const actions = {
       params
     })
     const { data } = res
-    commit('SET_FILGHTS', data)
+    // commit('SET_FILGHTS', data)
+    commit('SET_AIRSHISTORY', data)
   }
 }

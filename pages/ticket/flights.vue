@@ -4,6 +4,10 @@
   margin 0 auto
 .flights__main
   width 745px
+.flights__sider
+  width 240px
+.filghts__statement
+  margin 20px 0
 </style>
 <template lang='pug'>
 .flights
@@ -12,19 +16,22 @@
       flights-list
     el-col.flights__sider(:span='4')
       //- flights-statement
-      //- flights-history
+      statement-bar.filghts__statement
+      flights-history
 
 </template>
 <script>
 import FlightsList from 'components/ticket/FlightsList'
 import FlightsStatement from 'components/ticket/FlightsStatement'
 import FlightsHistory from 'components/ticket/FlightsHistory'
+import StatementBar from 'components/ticket/StatementBar'
 export default {
   name: 'filghts',
   components: {
     FlightsList,
     FlightsStatement,
-    FlightsHistory
+    FlightsHistory,
+    StatementBar
   },
   validate ({ query }) {
     return true
