@@ -10,7 +10,6 @@ export const state = () => ({
 export const getters = {
   filghtsData(state) {
     //返回最新
-    // return state.airsHistory.slice(-1)[0]
     return state.currentData
   }
 }
@@ -18,10 +17,6 @@ export const getters = {
 export const mutations = {
   //保存查询记录
   SET_AIRSHISTORY(state, obj) {
-    // state.airsHistory.map(item=>{
-    //   if()item.info.departCity item.info.destCity item.info.departDate
-    // })
-
     if (state.airsHistory.length === 0) {
       state.currentData = obj
       state.airsHistory.push(obj)
@@ -33,8 +28,10 @@ export const mutations = {
         current.info.departCity === obj.info.departCity &&
         current.info.destCity === obj.info.destCity &&
         current.info.departDate === obj.info.departDate
-      )
+      ) {
+        state.currentData = state.airsHistory[i]
         return
+      }
     }
     state.currentData = obj
     state.airsHistory.push(obj)

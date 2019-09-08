@@ -1,18 +1,5 @@
 <style lang='stylus' scoped>
 @import '~assets/stylus/variables.styl'
-.select
-  margin 20px 0 10px 0
-  font-size 14px
-.select__item
-  margin 0 5px
-.list__cancel
-  font-size 14px
-.list__btn
-  margin 0 5px
-  padding 7px 15px
-  border none
-  color #fff
-  background-color $mainColor
 .list__pagation
   margin 10px 0
 .list__warning
@@ -22,85 +9,60 @@
 <template lang='pug'>
 .list
   //-  列表筛选栏模块
-  el-row.select(type='flex' justify='space-between' align='middle')
-    el-col(:span='8') 单程：{{ `${filghtsData.info.departCity }-${filghtsData.info.destCity }/${filghtsData.info.departDate}`}}
-    //- 起飞机场
-    el-col.select__item(:span='4')
-      el-select(v-model='airport' placeholder='起飞机场' @change='handleAirport')
-        el-option(v-for='(item,index) in filghtsData.options.airport'
-                  :key='index'
-                  :label='item'
-                  :value='item')
-    //- 起飞机场
-    el-col.select__item(:span='4')
-      el-select(v-model='departTime' placeholder='起飞时间' @change='handleDepartTime')
-        el-option(v-for='(item,index) in filghtsData.options.flightTimes'
-                  :key='index'
-                  :label='`${item.from}:00 - ${item.to}:00`'
-                  :value='`${item.from}-${item.to}`')
-    //- 起飞机场
-    el-col.select__item(:span='4')
-      el-select(v-model='company' placeholder='航空公司'  @change='handleCompany')
-        el-option(v-for='(item,index) in filghtsData.options.company' :key='index' :label='item' :value='item')
-    //- 起飞机场
-    el-col.select__item(:span='4' )
-      el-select(v-model='planeSize' placeholder='机型' @change='handlePlaneSize')
-        el-option(v-for='(item,index) in sizeData' :key='index' :label='item.label' :value='item.value')
-
-  //- 取消筛选
-  .list__cancel
-    span 筛选:
-    el-button.list__btn(round size='small' @click='handleCancel') 撤销
+  filghts-select(@setTickData='setTickData' @cancelSelect='cancelSelect' )
 
   //- 机票列表
   .list__filghts
     filghts-header
-    filghts-item(v-for='item in ticketData' :data='item' :key='item.id')
-    .list__warning(v-if='ticketData.length===0' ) 暂无航班信息！
+    div(v-loading='loading')
+      filghts-item(v-for='item in ticketData'
+                  :data='item'
+                  :key='item.id' )
+      .list__warning(v-if='ticketData.length===0' ) 暂无航班信息！
+
   //- 机票分页
   .list__pagation
-    el-pagination(@size-change='handleSizeChange' @current-change='handleCurrentChange' :current-page='pageNum' :page-sizes='[5, 10, 15, 20]' :page-size='pageSize' layout='total, sizes, prev, pager, next, jumper' :total='total' v-if='ticketData.length>0')
+    el-pagination(@size-change='handleSizeChange'
+                  @current-change='handleCurrentChange'
+                  :current-page='pageNum'
+                  :page-sizes='[5, 10, 15, 20]'
+                  :page-size='pageSize'
+                  layout='total, sizes, prev, pager, next, jumper'
+                  :total='total'
+                  v-if='ticketData.length>0')
 
 
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
+import FilghtsSelect from 'components/ticket/FilghtsSelect'
 import FilghtsItem from 'components/ticket/FilghtsItem'
 import FilghtsHeader from 'components/ticket/FilghtsHeader'
 export default {
   components: {
+    FilghtsSelect,
     FilghtsItem,
     FilghtsHeader
   },
   data () {
     return {
-      sizeData: [ //飞机尺寸
-        { value: 'L', label: '大' },
-        { value: 'M', label: '中' },
-        { value: 'S', label: '小' }
-      ],
-      cacheTickData: [],
+      cacheTickData: [],//筛选临时数据
       ticketData: [],//机票数据
-      airport: '',
-      company: '',
-      departTime: '',
-      planeSize: '',
+      /* --------------------------撤销数据-------------------------------- */
       pageNum: 1,
       pageSize: 5,
-      total: 0
+      total: 0,
+      loading: true//加载选项
     }
   },
   computed: {
-    ...mapState({
+    ...mapState({ //机票数据
       filghtsData: state => state.ticket.currentData
-    }),
-    tiket () {
-      return this.ticketData
-    }
+    })
   },
   watch: {
-    filghtsData (val) {
+    filghtsData (val) { //监听数据变化刷新页面
       this.getTicketData(val.flights)
     }
   },
@@ -108,6 +70,15 @@ export default {
     ...mapActions({
       getAirs: 'ticket/getAirs'
     }),
+    setTickData (data) {
+      this.pageNum = 1
+      this.cacheTickData = data
+      this.getTicketData(this.cacheTickData)
+    },
+    cancelSelect () {
+      this.getTicketData(this.filghtsData.flights)
+      this.cacheTickData.length = 0
+    },
     /* --------------------------分页功能-------------------------------- */
     handleSizeChange (val) {//选择一页多少条数据
       this.pageSize = val
@@ -128,54 +99,11 @@ export default {
         return index >= (this.pageNum - 1) * this.pageSize && index < this.pageNum * this.pageSize
       })
       this.total = data.length
-    },
-    /* --------------------------筛选功能-------------------------------- */
-    handleAirport (val) { //筛选起飞机场
-      this.pageNum = 1
-      const data = this.getFilterData(this.filghtsData.flights, 'org_airport_name', val)
-      this.cacheTickData = data
-      this.getTicketData(this.cacheTickData)
-    },
-    handleDepartTime (val) { //筛选起飞时间
-      this.pageNum = 1
-      const time = val.split('-')
-      let from = time[0] * 60
-      let to = time[1] * 60
-      const data = this.filghtsData.flights.filter(item => {
-        const date = item.dep_time.split(':')
-        if (date[0] === '0') {
-          date[0] = 24
-        }
-        let time = date[0] * 60 + +date[1]
-        return time >= from && time <= to
-      })
-      this.cacheTickData = data
-      this.getTicketData(data)
-    },
-    handleCompany (val) {//筛选h航空公司
-      this.pageNum = 1
-      const data = this.getFilterData(this.filghtsData.flights, 'airline_name', val)
-      this.cacheTickData = data
-      this.getTicketData(data)
-    },
-    handlePlaneSize (val) { //筛选机型
-      this.pageNum = 1
-      const data = this.getFilterData(this.filghtsData.flights, 'plane_size', val)
-      this.cacheTickData = data
-      this.getTicketData(data)
-    },
-    getFilterData (data, attr, val) { //过滤数据函数
-      return data.filter(item => {
-        return item[attr] === val
-      })
-    },
-    handleCancel () {//取消筛选
-      this.getTicketData(this.filghtsData.flights)
-      this.cacheTickData.length = 0
     }
   },
-  mounted () {
-    this.getAirs(this.$route.query)
+  async mounted () {
+    await this.getAirs(this.$route.query)
+    this.loading = false
   }
 }
 </script>

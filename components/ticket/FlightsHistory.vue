@@ -24,12 +24,15 @@
   .history__head
     span 历史查询
   .history__main
-    el-row.history__item(v-for='(item,index) in  airsHistory' type='flex' :key='index')
+    el-row.history__item(v-for='(item,index) in  airsHistory'
+                        type='flex'
+                        :key='index'
+                        @click.native='handleClick(index)')
       el-col.history__info
         p.history__city {{ item.info.departCity + '- ' + item.info.destCity}}
         p.history__time {{ item.info.departDate }}
       el-row
-        el-button.history__btn(size='mini' @click='handleClick(index)') 选择
+        el-button.history__btn(size='mini') 选择
 </template>
 
 <script>

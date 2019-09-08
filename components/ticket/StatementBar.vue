@@ -26,7 +26,6 @@ el-row.statement
 <script>
 
 export default {
-  components: {},
   data () {
     return {
       barData: [

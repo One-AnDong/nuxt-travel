@@ -60,6 +60,7 @@
   font-size 20px
   color $mainColor
 .recommend__btn
+  border none
   color #fff
   background-color $mainColor
 .recommend__count
@@ -108,7 +109,7 @@ div
         el-col(:span='4')
           span.recommend__price {{ ' ¥ ' + item.org_settle_price }}
         el-col(:span='4')
-          el-button.recommend__btn(size='small') 选定
+          el-button.recommend__btn(size='small' @click='handleChoose(item.seat_xid)') 选定
           p.recommend__count {{ '剩余:' + item.discount }}
 </template>
 
@@ -116,7 +117,7 @@ div
 
 export default {
   props: {
-    data: {
+    data: { // 机票数据
       type: Object,
       default: () => {
         return {}
@@ -140,8 +141,17 @@ export default {
     }
   },
   methods: {
-    handleClick () {
+    handleClick () {//处理显示
       this.isShow = !this.isShow
+    },
+    handleChoose (seat_xid) {//处理机票选择
+      this.$router.push({
+        path: '/ticket/order',
+        query: {
+          id: this.data.id,
+          seat_xid
+        }
+      })
     }
   }
 }

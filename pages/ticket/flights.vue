@@ -15,8 +15,7 @@
     el-col.flights__main(:span='20')
       flights-list
     el-col.flights__sider(:span='4')
-      //- flights-statement
-      statement-bar.filghts__statement
+      flights-statement
       flights-history
 
 </template>
@@ -24,14 +23,12 @@
 import FlightsList from 'components/ticket/FlightsList'
 import FlightsStatement from 'components/ticket/FlightsStatement'
 import FlightsHistory from 'components/ticket/FlightsHistory'
-import StatementBar from 'components/ticket/StatementBar'
 export default {
   name: 'filghts',
   components: {
     FlightsList,
     FlightsStatement,
     FlightsHistory,
-    StatementBar
   },
   validate ({ query }) {
     return true

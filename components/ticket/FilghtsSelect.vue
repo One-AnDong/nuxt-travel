@@ -1,6 +1,18 @@
 <style lang='stylus' scoped>
-//@import url(); 引入公共css类
-
+@import '~assets/stylus/variables.styl'
+.select
+  margin 20px 0 10px 0
+  font-size 14px
+.select__item
+  margin 0 5px
+.list__cancel
+  font-size 14px
+.list__btn
+  margin 0 5px
+  padding 7px 15px
+  border none
+  color #fff
+  background-color $mainColor
 </style>
 <template lang='pug'>
 .select
@@ -39,10 +51,18 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  components: {},
+  name: 'FilghtsSelect',
   data () {
     return {
-
+      airport: '',
+      company: '',
+      departTime: '',
+      planeSize: '',
+      sizeData: [ //飞机尺寸
+        { value: 'L', label: '大' },
+        { value: 'M', label: '中' },
+        { value: 'S', label: '小' }
+      ]
     }
   },
   computed: {
@@ -55,36 +75,24 @@ export default {
     handleAirport (val) { //筛选起飞机场
       const data = this.getFilterData(this.filghtsData.flights, 'org_airport_name', val)
       this.$emit('setTickData', data)
-      this.cacheTickData = data
-      this.getTicketData(this.cacheTickData)
     },
     handleDepartTime (val) { //筛选起飞时间
-      this.pageNum = 1
-      const time = val.split('-')
-      let from = time[0] * 60
-      let to = time[1] * 60
+      const [from, to] = val.split('-')
       const data = this.filghtsData.flights.filter(item => {
-        const date = item.dep_time.split(':')
-        if (date[0] === '0') {
-          date[0] = 24
-        }
-        let time = date[0] * 60 + +date[1]
-        return time >= from && time <= to
+        const current = item.dep_time.split(':')[0]
+        return current >= from && current < to
       })
-      this.cacheTickData = data
-      this.getTicketData(data)
+      this.$emit('setTickData', data)
+
     },
     handleCompany (val) {//筛选h航空公司
-      this.pageNum = 1
       const data = this.getFilterData(this.filghtsData.flights, 'airline_name', val)
-      this.cacheTickData = data
-      this.getTicketData(data)
+      this.$emit('setTickData', data)
     },
     handlePlaneSize (val) { //筛选机型
-      this.pageNum = 1
       const data = this.getFilterData(this.filghtsData.flights, 'plane_size', val)
-      this.cacheTickData = data
-      this.getTicketData(data)
+      this.$emit('setTickData', data)
+
     },
     getFilterData (data, attr, val) { //过滤数据函数
       return data.filter(item => {
@@ -92,8 +100,7 @@ export default {
       })
     },
     handleCancel () {//取消筛选
-      this.getTicketData(this.filghtsData.flights)
-      this.cacheTickData.length = 0
+      this.$emit('cancelSelect')
     }
   }
 }
