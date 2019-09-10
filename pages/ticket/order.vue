@@ -1,5 +1,4 @@
 <style lang='stylus' scoped>
-// @import url(); 引入公共css类
 .order
   width 1000px
   margin 20px auto
@@ -24,11 +23,31 @@
 <script>
 import OrderInfo from 'components/ticket/OrderInfo'
 import OrderForm from 'components/ticket/OrderForm'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   name: 'order',
+  data () {
+    return {
+      airsInfo: {
+        insurances: [],
+        seat_infos: []
+      }
+    }
+  },
   components: {
     OrderInfo,
     OrderForm
+  },
+  methods: {
+    ...mapActions({
+      getAirsData: 'ticket/getAirsData'
+    }),
+    ...mapMutations({
+      setPrice: 'ticket/SET_AIRPRICE'
+    })
+  },
+  mounted () {
+    this.getAirsData(this.$route.query)
   }
 }
 </script>

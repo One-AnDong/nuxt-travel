@@ -49,7 +49,7 @@ export default {
         // this.handleLogin() ==>当前组件请求
         this.userLogin(this.loginForm).then(() => {
           this.$message.success('登陆成功，正在跳转中')
-          this.$router.push({ name: 'index' })
+          this.$router.back()
         })
       })
     },
@@ -61,7 +61,7 @@ export default {
       this.setToken(data.token)
       this.setUserInfo(data.user)
       this.$message.success('登陆成功，正在跳转中')
-      this.$router.push({ name: 'index' })
+      this.$router.back()
     },
     /* --------------------------接口函数-------------------------------- */
     setLogin (data) {

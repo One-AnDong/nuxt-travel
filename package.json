@@ -19,8 +19,10 @@
     "moment": "^2.24.0",
     "pug": "^2.0.4",
     "pug-plain-loader": "^1.0.0",
+    "qrcode": "^1.4.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
+    "vue-qr": "^2.1.0",
     "vuex-persistedstate": "^2.5.4"
   },
   "config": {
