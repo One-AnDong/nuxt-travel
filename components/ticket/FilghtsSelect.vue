@@ -62,7 +62,13 @@ export default {
         { value: 'L', label: '大' },
         { value: 'M', label: '中' },
         { value: 'S', label: '小' }
-      ]
+      ],
+      filters: {
+        airport: { key: 'org_airport_name', value: '' },
+        company: { key: 'airline_name', value: '' },
+        departTime: { key: 'airline_name', value: '' },
+        planeSize: { key: 'plane_size', value: '' },
+      }
     }
   },
   computed: {
@@ -73,34 +79,47 @@ export default {
   methods: {
     /* --------------------------筛选功能-------------------------------- */
     handleAirport (val) { //筛选起飞机场
-      const data = this.getFilterData(this.filghtsData.flights, 'org_airport_name', val)
-      this.$emit('setTickData', data)
+      this.setData({ target: 'airport', value: val })
     },
     handleDepartTime (val) { //筛选起飞时间
-      const [from, to] = val.split('-')
-      const data = this.filghtsData.flights.filter(item => {
-        const current = item.dep_time.split(':')[0]
-        return current >= from && current < to
-      })
-      this.$emit('setTickData', data)
-
+      this.setData({ target: 'departTime', value: val })
     },
-    handleCompany (val) {//筛选h航空公司
-      const data = this.getFilterData(this.filghtsData.flights, 'airline_name', val)
-      this.$emit('setTickData', data)
+    handleCompany (val) { //筛选航空公司
+      this.setData({ target: 'company', value: val })
     },
     handlePlaneSize (val) { //筛选机型
-      const data = this.getFilterData(this.filghtsData.flights, 'plane_size', val)
-      this.$emit('setTickData', data)
-
+      this.setData({ target: 'planeSize', value: val })
     },
     getFilterData (data, attr, val) { //过滤数据函数
       return data.filter(item => {
         return item[attr] === val
       })
     },
-    handleCancel () {//取消筛选
+    handleCancel () { //取消筛选
       this.$emit('cancelSelect')
+    },
+    setData (options) {
+      this.filters[options.target].value = options.value
+      const data = this.validator()
+      console.log(data)
+      this.$emit('setTickData', data)
+    },
+    validator () {//筛选器
+      return this.filghtsData.flights.filter(item => {
+        let valid = true
+        Object.keys(this.filters).map(v => {
+          if (!this.filters[v].value) return
+          if (v === 'departTime') { //过滤时间需要转换
+            const [from, to] = this.filters[v].value.split('-')
+            const current = item.dep_time.split(':')[0]
+            return valid = current >= from && current < to
+          }
+          if (item[this.filters[v].key] !== this.filters[v].value) {
+            valid = false
+          }
+        })
+        return valid
+      })
     }
   }
 }

@@ -3,7 +3,8 @@
 
 </style>
 <template lang='pug'>
-.post {{ $route.params.city }}
+.post
+  span 城市页面{{ $route.params.city }}
 </template>
 
 <script>

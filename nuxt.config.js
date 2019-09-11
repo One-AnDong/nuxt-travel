@@ -27,7 +27,7 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#ff9d00' },
   /*
    ** Global CSS
    */
@@ -48,7 +48,7 @@ export default {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [],
+  // buildModules: ['@nuxt/typescript-build'],
   /*
    ** Nuxt.js modules
    */
